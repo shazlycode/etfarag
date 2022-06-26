@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "510430045444",
+    "firebase_url": "https://etfarag-52dc8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "etfarag-52dc8",
+    "storage_bucket": "etfarag-52dc8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510430045444:android:88efc799190a9cc8039c51",
+        "android_client_info": {
+          "package_name": "com.shazlycode.etfarag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510430045444-vb7gkk2inl1li65tgvdoctde1t0rcalh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmiDxEPLLpHfEGrF0nxJDvF4NrUYqQAIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510430045444-vb7gkk2inl1li65tgvdoctde1t0rcalh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

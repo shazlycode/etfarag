@@ -1,14 +1,20 @@
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:etfarag/providers/google_signin_provider.dart';
 import 'package:etfarag/providers/live_channel_provider.dart';
 import 'package:etfarag/providers/movies_provider.dart';
 import 'package:etfarag/screens/add_live_screen.dart';
 import 'package:etfarag/screens/add_movie_screen.dart';
 import 'package:etfarag/screens/main_screen.dart';
+import 'package:etfarag/screens/signup_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await DartVLC.initialize();
   runApp(const MyApp());
 }
@@ -20,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => GoogleSignInProvider()),
         ChangeNotifierProvider(create: (_) => LiveChannelsProvider()),
         ChangeNotifierProvider(create: (_) => MovieChannelsProvider()),
       ],
@@ -96,7 +103,21 @@ class MyApp extends StatelessWidget {
             )),
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.dark,
-        home: MainScree(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasData) {
+              return MainScree();
+            } else if (snapshot.hasError) {
+              return Text('an error occured, Try again later');
+            }
+            return SignupScreen();
+          },
+        ),
         routes: {
           AddLiveChannel.id: (context) => AddLiveChannel(),
           AddMovie.id: (context) => AddMovie(),

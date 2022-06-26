@@ -1,8 +1,12 @@
+import 'package:etfarag/providers/google_signin_provider.dart';
 import 'package:etfarag/providers/movies_provider.dart';
 import 'package:etfarag/screens/add_live_screen.dart';
 import 'package:etfarag/screens/add_movie_screen.dart';
 import 'package:etfarag/screens/video_player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/live_channel_provider.dart';
@@ -17,6 +21,7 @@ class MobileBody extends StatefulWidget {
 class _MobileBodyState extends State<MobileBody> {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -31,7 +36,40 @@ class _MobileBodyState extends State<MobileBody> {
                 onPressed: () {
                   Navigator.pushNamed(context, AddMovie.id);
                 },
-                icon: Icon(Icons.add_box_sharp))
+                icon: Icon(Icons.add_box_sharp)),
+            GestureDetector(
+              onTap: () {
+                showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(300, 20, 30, 100),
+                    items: [
+                      PopupMenuItem(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user!.displayName!),
+                          Text(user.email!),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          IconButton(
+                              icon: FaIcon(
+                                  FontAwesomeIcons.arrowRightFromBracket),
+                              onPressed: () {
+                                context.read<GoogleSignInProvider>().logout();
+                                Navigator.pop(context);
+                              }),
+                        ],
+                      )),
+                    ]);
+              },
+              child: CircleAvatar(
+                backgroundImage: user != null
+                    ? NetworkImage(user.photoURL!)
+                    : NetworkImage(
+                        'https://www.pngitem.com/pimgs/m/576-5768680_avatar-png-icon-person-icon-png-free-transparent.png'),
+              ),
+            )
           ],
           title: Text(
             'Etfarag',
